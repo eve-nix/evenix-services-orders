@@ -7,6 +7,9 @@
 # Pull base image.
 FROM ubuntu:14.04
 
+# Haha change this dumbass
+ENV MYSQL_ALLOW_EMPTY_PASSWORD=yes
+
 # Install MySQL.
 RUN \
   apt-get update && \
