@@ -48,22 +48,15 @@ jobs:
 
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
+        
+      - name: Tag image
+        run: docker tag eve-nix:latest 855285635841.dkr.ecr.us-east-1.amazonaws.com/eve-nix:latest
 
       - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 855285635841.dkr.ecr.us-east-1.amazonaws.com
 
       - name: Push image
-        run: |
-          IMAGE_ID=855285635841.dkr.ecr.us-east-1.amazonaws.com/eve-nix/$IMAGE_NAME
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+        run: docker push 855285635841.dkr.ecr.us-east-1.amazonaws.com/eve-nix:latest
 
           # Use Docker `latest` tag convention
           [ "$VERSION" == "master" ] && VERSION=latest
