@@ -57,12 +57,3 @@ jobs:
 
       - name: Push image
         run: docker push 855285635841.dkr.ecr.us-east-1.amazonaws.com/eve-nix:latest
-
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
-
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
